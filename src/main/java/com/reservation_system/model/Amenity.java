@@ -1,13 +1,13 @@
-package com.reservation_system.domain;
+package com.reservation_system.model;
 
 import java.time.OffsetDateTime;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
@@ -18,7 +18,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class User {
+public class Amenity {
 
     @Id
     @Column(nullable = false, updatable = false)
@@ -34,8 +34,15 @@ public class User {
     )
     private Long id;
 
-    @OneToMany(mappedBy = "userReservation")
-    private Set<Reservation> userReservationReservations;
+    @Column(nullable = false)
+    private Integer amenityType;
+
+    @OneToOne(
+            mappedBy = "reservationAmenity",
+            fetch = FetchType.LAZY,
+            optional = false
+    )
+    private Reservation reservationAmenity;
 
     @Column(nullable = false, updatable = false)
     private OffsetDateTime dateCreated;

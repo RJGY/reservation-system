@@ -1,6 +1,6 @@
 package com.reservation_system.repos;
 
-import com.reservation_system.domain.Reservation;
+import com.reservation_system.model.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
