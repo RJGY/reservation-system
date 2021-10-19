@@ -15,13 +15,15 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Reservation {
 
     @Id
