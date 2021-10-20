@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.boot.CommandLineRunner;
 import com.reservation_system.model.Amenity;
+import com.reservation_system.model.AmenityType;
 import com.reservation_system.model.Reservation;
 import com.reservation_system.model.User;
 import com.reservation_system.repos.ReservationRepository;
@@ -31,7 +32,10 @@ public class ReservationSystemApplication {
                                       AmenityRepository amenityRepository) {
         return (args) -> {
             User user = userRepository.save(new User());
-            Amenity amenity = amenityRepository.save(new Amenity());
+            Amenity amenity = Amenity.builder()
+                    .amenityType("POOL")
+                    .build();
+            amenityRepository.save(new Amenity());
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             Date date = new Date();
             LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
