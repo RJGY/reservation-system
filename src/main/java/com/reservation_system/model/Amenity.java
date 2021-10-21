@@ -38,7 +38,7 @@ public class Amenity {
     private Long id;
 
     @Column(nullable = false)
-    private String amenityType;
+    private AmenityType amenityType;
 
     @OneToOne(
             mappedBy = "reservationAmenity",

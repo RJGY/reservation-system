@@ -33,9 +33,9 @@ public class ReservationSystemApplication {
         return (args) -> {
             User user = userRepository.save(new User());
             Amenity amenity = Amenity.builder()
-                    .amenityType("POOL")
+                    .amenityType(AmenityType.POOL)
                     .build();
-            amenityRepository.save(new Amenity());
+            amenityRepository.save(amenity);
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             Date date = new Date();
             LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
