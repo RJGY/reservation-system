@@ -1,16 +1,9 @@
 package com.reservation_system.model;
 
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.*;
 
 import lombok.*;
 
@@ -18,9 +11,9 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User {
 
     @Id
@@ -37,8 +30,17 @@ public class User {
     )
     private Long id;
 
-    @OneToMany(mappedBy = "userReservation")
-    private Set<Reservation> userReservationReservations;
+    @Column(nullable = false)
+    private String fullName;
+
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    @Column
+    private String passwordHash;
+
+    @OneToMany(mappedBy = "userReservation", fetch = FetchType.EAGER)
+    private Set<Reservation> reservations = new HashSet<>();
 
     @Column(nullable = false, updatable = false)
     private OffsetDateTime dateCreated;
@@ -57,4 +59,9 @@ public class User {
         lastUpdated = OffsetDateTime.now();
     }
 
+    public User(String fullName, String username, String passwordHash) {
+        this.fullName = fullName;
+        this.username = username;
+        this.passwordHash = passwordHash;
+    }
 }

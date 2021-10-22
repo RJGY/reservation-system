@@ -31,7 +31,12 @@ public class ReservationSystemApplication {
                                       ReservationRepository reservationRepository,
                                       AmenityRepository amenityRepository) {
         return (args) -> {
-            User user = userRepository.save(new User());
+            User user = User.builder()
+                    .fullName("Reese Gunardi")
+                    .username("RJGY")
+                    .passwordHash("xd")
+                    .build();
+            userRepository.save(user);
             Amenity amenity = Amenity.builder()
                     .amenityType(AmenityType.POOL)
                     .build();
