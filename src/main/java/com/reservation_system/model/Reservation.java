@@ -16,6 +16,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Entity
@@ -40,12 +41,15 @@ public class Reservation {
     )
     private Long id;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false)
     private LocalDate reservationDate;
 
+    @DateTimeFormat(pattern = "HH:mm")
     @Column(nullable = false)
     private LocalTime startTime;
 
+    @DateTimeFormat(pattern = "HH:mm")
     @Column(nullable = false)
     private LocalTime endTime;
 
