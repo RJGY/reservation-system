@@ -37,10 +37,18 @@ public class ReservationSystemApplication {
                     .passwordHash("xd")
                     .build();
             userRepository.save(user);
-            Amenity amenity = Amenity.builder()
+            Amenity amenityPool = Amenity.builder()
                     .amenityType(AmenityType.POOL)
                     .build();
-            amenityRepository.save(amenity);
+            Amenity amenitySauna = Amenity.builder()
+                    .amenityType(AmenityType.SAUNA)
+                    .build();
+            Amenity amenityGym = Amenity.builder()
+                    .amenityType(AmenityType.GYM)
+                    .build();
+            amenityRepository.save(amenityPool);
+            amenityRepository.save(amenitySauna);
+            amenityRepository.save(amenityGym);
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             Date date = new Date();
             LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -49,7 +57,7 @@ public class ReservationSystemApplication {
                     .startTime(LocalTime.of(12, 00))
                     .endTime(LocalTime.of(13, 00))
                     .userReservation(user)
-                    .reservationAmenity(amenity)
+                    .reservationAmenity(amenityPool)
                     .build();
 
             reservationRepository.save(reservation);
