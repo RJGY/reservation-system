@@ -1,7 +1,9 @@
 package com.reservation_system.controller;
 
+import com.reservation_system.model.Amenity;
 import com.reservation_system.model.Reservation;
 import com.reservation_system.model.User;
+import com.reservation_system.service.AmenityService;
 import com.reservation_system.service.ReservationService;
 import com.reservation_system.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Set;
 
 
@@ -20,10 +23,12 @@ public class HomeController {
 
     final UserService userService;
     final ReservationService reservationService;
+    final AmenityService amenityService;
 
-    public HomeController(UserService userService, ReservationService reservationService) {
+    public HomeController(UserService userService, ReservationService reservationService, AmenityService amenityService) {
         this.userService = userService;
         this.reservationService = reservationService;
+        this.amenityService = amenityService;
     }
 
     @GetMapping("/")
@@ -36,6 +41,8 @@ public class HomeController {
         User user = userService.get(10000L);
         session.setAttribute("user", user);
         Reservation reservation = new Reservation();
+        List<Amenity> amenities = amenityService.findAll();
+        model.addAttribute("amenities", amenities);
         model.addAttribute("reservation", reservation);
 
         return "reservations";
@@ -48,6 +55,7 @@ public class HomeController {
         // Save to DB after updating
         assert user != null;
         reservation.setUserReservation(user);
+
         reservationService.create(reservation);
         Set<Reservation> userReservations = user.getReservations();
         userReservations.add(reservation);
