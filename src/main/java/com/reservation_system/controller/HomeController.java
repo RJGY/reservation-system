@@ -41,8 +41,7 @@ public class HomeController {
         User user = userService.get(10000L);
         session.setAttribute("user", user);
         Reservation reservation = new Reservation();
-        List<Amenity> amenities = amenityService.findAll();
-        model.addAttribute("amenities", amenities);
+
         model.addAttribute("reservation", reservation);
 
         return "reservations";
@@ -55,7 +54,13 @@ public class HomeController {
         // Save to DB after updating
         assert user != null;
         reservation.setUserReservation(user);
-
+        List<Amenity> amenities = amenityService.findAll();
+        for (Amenity amenity : amenities) {
+            if (amenity.getAmenityType() == reservation.getReservationAmenity().getAmenityType()) {
+                reservation.setReservationAmenity(amenity);
+                break;
+            }
+        }
         reservationService.create(reservation);
         Set<Reservation> userReservations = user.getReservations();
         userReservations.add(reservation);
