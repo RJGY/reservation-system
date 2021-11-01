@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 
@@ -57,6 +58,7 @@ public class HomeController {
         List<Amenity> amenities = amenityService.findAll();
         for (Amenity amenity : amenities) {
             if (amenity.getAmenityType() == reservation.getReservationAmenity().getAmenityType()) {
+                amenity.setReservationAmenity(reservation);
                 reservation.setReservationAmenity(amenity);
                 break;
             }
@@ -66,6 +68,7 @@ public class HomeController {
         userReservations.add(reservation);
         user.setReservations(userReservations);
         userService.update(user.getId(), user);
+        amenityService.update(reservation.getReservationAmenity().getId(), reservation.getReservationAmenity());
         return "redirect:/reservations";
     }
 
