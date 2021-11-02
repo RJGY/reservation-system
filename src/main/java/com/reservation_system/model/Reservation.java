@@ -57,7 +57,7 @@ public class Reservation {
     @JoinColumn(name = "user_reservation_id", nullable = false)
     private User userReservation;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "reservation_amenity_id", nullable = false)
     private Amenity reservationAmenity;
 

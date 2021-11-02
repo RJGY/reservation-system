@@ -58,7 +58,9 @@ public class HomeController {
         List<Amenity> amenities = amenityService.findAll();
         for (Amenity amenity : amenities) {
             if (amenity.getAmenityType() == reservation.getReservationAmenity().getAmenityType()) {
-                amenity.setReservationAmenity(reservation);
+                Set<Reservation> amenityReservations = amenity.getReservationAmenity();
+                amenityReservations.add(reservation);
+                amenity.setReservationAmenity(amenityReservations);
                 reservation.setReservationAmenity(amenity);
                 break;
             }
