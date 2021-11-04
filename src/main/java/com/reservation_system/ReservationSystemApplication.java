@@ -11,6 +11,7 @@ import com.reservation_system.model.Reservation;
 import com.reservation_system.model.User;
 import com.reservation_system.repos.ReservationRepository;
 import com.reservation_system.repos.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -34,7 +35,7 @@ public class ReservationSystemApplication {
             User user = User.builder()
                     .fullName("Reese Gunardi")
                     .username("RJGY")
-                    .passwordHash("xd")
+                    .passwordHash(bCryptPasswordEncoder().encode("12345"))
                     .build();
             userRepository.save(user);
             Amenity amenityPool = Amenity.builder()
@@ -62,5 +63,10 @@ public class ReservationSystemApplication {
 
             reservationRepository.save(reservation);
         };
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
