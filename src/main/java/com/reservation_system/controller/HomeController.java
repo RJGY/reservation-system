@@ -6,6 +6,8 @@ import com.reservation_system.model.User;
 import com.reservation_system.service.AmenityService;
 import com.reservation_system.service.ReservationService;
 import com.reservation_system.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,13 +41,22 @@ public class HomeController {
 
     @GetMapping("/reservations")
     public String reservations(Model model, HttpSession session) {
-        User user = userService.get(10000L);
-        session.setAttribute("user", user);
-        Reservation reservation = new Reservation();
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String name = principal.getUsername();
+        User user = userService.getUserByUsername(name);
 
-        model.addAttribute("reservation", reservation);
+        // This should always be the case
+        if (user != null) {
+            session.setAttribute("user", user);
 
-        return "reservations";
+            // Empty reservation object in case the user creates a new reservation
+            Reservation reservation = new Reservation();
+            model.addAttribute("reservation", reservation);
+
+            return "reservations";
+        }
+
+        return "index";
     }
 
     @PostMapping("/reservations-submit")
