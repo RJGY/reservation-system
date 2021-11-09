@@ -1,6 +1,7 @@
 package com.reservation_system;
 
 import com.reservation_system.repos.AmenityRepository;
+import com.reservation_system.repos.CapacityRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -19,9 +20,20 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootApplication
 public class ReservationSystemApplication {
+
+    private Map<AmenityType, Integer> initialCapacities =
+        new HashMap<>() {
+            {
+                put(AmenityType.GYM, 20);
+                put(AmenityType.POOL, 4);
+                put(AmenityType.SAUNA, 1);
+            }
+        };
 
     public static void main(String[] args) {
         SpringApplication.run(ReservationSystemApplication.class, args);
@@ -29,7 +41,7 @@ public class ReservationSystemApplication {
 
     @Bean
     public CommandLineRunner loadData(UserRepository userRepository,
-                                      ReservationRepository reservationRepository,
+                                      CapacityRepository capacityRepository,
                                       AmenityRepository amenityRepository) {
         return (args) -> {
             User user = User.builder()
@@ -50,18 +62,7 @@ public class ReservationSystemApplication {
             amenityRepository.save(amenityPool);
             amenityRepository.save(amenitySauna);
             amenityRepository.save(amenityGym);
-            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            Date date = new Date();
-            LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            Reservation reservation = Reservation.builder()
-                    .reservationDate(localDate)
-                    .startTime(LocalTime.of(12, 00))
-                    .endTime(LocalTime.of(13, 00))
-                    .userReservation(user)
-                    .reservationAmenity(amenityPool)
-                    .build();
 
-            reservationRepository.save(reservation);
         };
     }
 
