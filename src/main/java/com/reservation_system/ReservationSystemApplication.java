@@ -1,15 +1,12 @@
 package com.reservation_system;
 
+import com.reservation_system.model.*;
 import com.reservation_system.repos.AmenityRepository;
 import com.reservation_system.repos.CapacityRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.boot.CommandLineRunner;
-import com.reservation_system.model.Amenity;
-import com.reservation_system.model.AmenityType;
-import com.reservation_system.model.Reservation;
-import com.reservation_system.model.User;
 import com.reservation_system.repos.ReservationRepository;
 import com.reservation_system.repos.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -62,7 +59,9 @@ public class ReservationSystemApplication {
             amenityRepository.save(amenityPool);
             amenityRepository.save(amenitySauna);
             amenityRepository.save(amenityGym);
-
+            for (AmenityType amenityType : initialCapacities.keySet()) {
+                capacityRepository.save(new Capacity(amenityType, initialCapacities.get(amenityType)));
+            }
         };
     }
 
