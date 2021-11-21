@@ -2,6 +2,7 @@ package com.reservation_system.service;
 
 import com.reservation_system.model.Reservation;
 import com.reservation_system.repos.AmenityRepository;
+import com.reservation_system.repos.CapacityRepository;
 import com.reservation_system.repos.ReservationRepository;
 import com.reservation_system.repos.UserRepository;
 import java.util.List;
@@ -17,12 +18,15 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
     private final AmenityRepository amenityRepository;
+    private final CapacityRepository capacityRepository;
 
     public ReservationService(final ReservationRepository reservationRepository,
-            final UserRepository userRepository, final AmenityRepository amenityRepository) {
+                              final UserRepository userRepository, final AmenityRepository amenityRepository,
+                              final CapacityRepository capacityRepository) {
         this.reservationRepository = reservationRepository;
         this.userRepository = userRepository;
         this.amenityRepository = amenityRepository;
+        this.capacityRepository = capacityRepository;
     }
 
     public List<Reservation> findAll() {
@@ -35,6 +39,17 @@ public class ReservationService {
     }
 
     public Long create(final Reservation reservation) {
+        int capacity = capacityRepository.findByAmenityType(reservation.getAmenityType()).getCapacity();
+        int overlappingReservations = reservationRepository
+                .findReservationsByReservationDateAndStartTimeBeforeAndEndTimeAfterOrStartTimeBetween(
+                        reservation.getReservationDate(),
+                        reservation.getStartTime(), reservation.getEndTime(),
+                        reservation.getStartTime(), reservation.getEndTime()).size();
+
+        if (overlappingReservations >= capacity) {
+            throw new CapacityFullException("This amenity's capacity is full at desired time");
+        }
+
         return reservationRepository.save(reservation).getId();
     }
 
